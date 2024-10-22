@@ -10,7 +10,7 @@ namespace Spojovy_seznam
     {
         static void Main(string[] args)
         {
-            Node uzlik = new Node(8);
+            LinkedList seznam = new LinkedList();
         }
 
         class Node
@@ -27,18 +27,19 @@ namespace Spojovy_seznam
         {
             public Node Head { get; set; }
 
-            public void Add(int value)
+            public void Add(int value)  //slozitost O(1)
             {
                 if (Head == null)
                     Head = new Node(value);
                 else
                 {
                     Node newNode = new Node(value);
+                    newNode.Next = Head;
                     Head = newNode;
                 }
 
             }
-            public bool Find(int value)
+            public bool Find(int value)  //slozitost O(n)
             {
                 
                 Node node = Head;
@@ -49,6 +50,20 @@ namespace Spojovy_seznam
                     node = node.Next;
                 }
                 return false;
+            }
+            public int Min()  //slozitost O(n)
+            {
+                if(Head == null)
+                    return 0;
+                int minimum = Head.Value;
+                Node ted = Head.Next;
+                while (ted != null) 
+                {
+                    if (ted.Value <= minimum)
+                        minimum = ted.Value;
+                    ted = ted.Next;
+                }
+                return minimum;
             }
         }
     }
