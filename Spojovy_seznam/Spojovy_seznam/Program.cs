@@ -128,7 +128,7 @@ namespace Spojovy_seznam
                 Head = null;
             }
 
-            public static void AbradabraFucDuplicates(LinkedList list) //static = nepotřebuji jinou třídu, nemusím to psát, zlehčí to
+            public static void AbradabraFucDuplicates(LinkedList list) 
             {
                 if (list == null) return;
                 if (list.Head == null) return;
@@ -169,7 +169,7 @@ namespace Spojovy_seznam
 
                     while (praveTed2 != null)
                     {
-                        if (praveTed1.Value == praveTed2.Value) //najdu stejný prvek ... v obou seznamech
+                        if (praveTed1.Value == praveTed2.Value) //najdu stejný prvek v obou seznamech
                         {
                             nalezenoVlist2 = true;
                             break;
@@ -177,19 +177,19 @@ namespace Spojovy_seznam
                         praveTed2 = praveTed2.Next;
                     }
 
-                    if (nalezenoVlist2 == false) //pokud jsem nenašla stejný prvek v seznamu2 jako prvek v 1. seznamu
+                    if (nalezenoVlist2 == false) 
                     {
-                        if (predTed1 != null) //před prvkem něco je
+                        if (predTed1 != null) 
                         {
-                            predTed1.Next = praveTed1.Next; //sloučim je dohromady, hus fuc prvek = odstranění
+                            predTed1.Next = praveTed1.Next; 
                         }
-                        else //pokud před prvkem nic není -> predTed1 je null ... musím hlavu posunout na další prvek, jinak bych byla v pytli (to už jsem)
+                        else 
                         {
                             list1.Head = praveTed1.Next;
                         }
                         praveTed1 = praveTed1.Next;
                     }
-                    else //našla jsem, takže nic nedělám
+                    else 
                     {
                         predTed1 = praveTed1;
                         praveTed1 = praveTed1.Next;
