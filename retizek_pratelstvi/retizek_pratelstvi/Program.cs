@@ -11,40 +11,118 @@ namespace retizek_pratelstvi
     {
         static void Main(string[] args)
         {
-            nacitaniVstupu();
+            int n = pocetUzivatelu(); //pocet uzivatelu
+            funkce(n);
+            
+           
+            
             Console.ReadLine();
 
         }
-        static void nacitaniVstupu ()
+
+        static int pocetUzivatelu()
         {
-            int n = Convert.ToInt32(Console.ReadLine());
-            string[] dvojice = Console.ReadLine().Split();
-            
-            List<int>[] spojeni = new List<int>[n+1];
-            for (int i = 0; i < n+1; i++)
+            return Convert.ToInt32(Console.ReadLine());
+        }
+        
+        static void funkce(int a)
+        {
+           
+            string[] dvojice = Console.ReadLine().Split(); //dvojice s "-"
+
+            List<int>[] spojeni = new List<int>[a + 1]; //list ... n+1 abyhc jich tam mel skutecne az do cisla N. pozici 0 necham prazdnou
+            for (int i = 0; i < a + 1; i++)  //list s listy
             {
                 spojeni[i] = new List<int>();
             }
-            for (int x = 0; x < dvojice.Length; x++)
+
+            for (int x = 0; x < dvojice.Length; x++) //vkladani cisel do listu
             {
                 string[] oba = dvojice[x].Split('-');
                 int cislo1 = Int32.Parse(oba[0]);
                 int cislo2 = Int32.Parse(oba[1]);
-                   //PRIDEJ DO SEZNAMU CISLA!!!
+                spojeni[cislo1].Add(cislo2);
+                spojeni[cislo2].Add(cislo1);
             }
-            
-            
-            
-            for (int i = 0; i < dvojice.Length; i++)
-            {
-                Console.WriteLine(dvojice[i]);
 
+            string[] zacatek = Console.ReadLine().Split(); // nacte sstart a cil 
+            int start = Int32.Parse(zacatek[0]);
+            int cil = Int32.Parse(zacatek[1]);
+
+           
+
+
+            Dictionary<int, int> predchozi = new Dictionary<int, int>();
+            bool[] otevreno = new bool[a + 1];
+            Queue<int> q = new Queue<int>();
+            q.Enqueue(start);
+            otevreno[start] = true;
+            predchozi[start] = -1;
+
+                       
+            bool hotovo = false;
+
+            while (q.Count > 0)
+            { 
+                int ted = q.Dequeue();
+                if (ted == cil)
+                {
+                    hotovo = true;
+                    break;
+                }
+
+                foreach ( int soused in spojeni[ted])
+                {
+                    if (otevreno[soused]==false)
+                    {
+                        otevreno[soused] = true;
+                        q.Enqueue(soused);
+                        predchozi.Add(soused, ted);
+
+                    }
+                }
             }
+            List<int> cestaZpet = new List<int>();
+            if (hotovo == true) 
+            {
+                int zpet = cil;
+                
+                while (zpet != -1)
+                {
+                    cestaZpet.Add(zpet);
+                    zpet = predchozi[zpet];
+                }
+                cestaZpet.Reverse();
+                
+            }
+            if (cestaZpet.Count == 2 && hotovo == true)
+            {
+                Console.WriteLine("start a cíl jsou prátelé.");
+            }
+            else if (cestaZpet.Count > 2)
+            {
+                Console.WriteLine(string.Join(" ",cestaZpet));
+            }
+            else
+            {
+                Console.WriteLine("neexistuje");
+            }
+
+
+
+
 
 
 
 
         }
+       
+        
+
+       
+
+        
+
 
 
 
