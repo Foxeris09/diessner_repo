@@ -10,6 +10,7 @@ namespace Spojovy_seznam
     {
         static void Main(string[] args)
         {
+<<<<<<< Updated upstream
             LinkedList seznam = new LinkedList();
             seznam.Add(1);
             seznam.Add(1);
@@ -26,6 +27,18 @@ namespace Spojovy_seznam
 
            
             Console.ReadLine();
+=======
+            LinkedList linkedList = new LinkedList();
+            linkedList.Add(4);
+            linkedList.Add(5);  
+            linkedList.Add(2);
+            linkedList.Add(7);
+            Console.WriteLine(linkedList.PrintLinkedList());
+            linkedList.SortLinkedList();
+            Console.WriteLine(linkedList.PrintLinkedList());
+            Console.ReadLine();
+
+>>>>>>> Stashed changes
         }
 
         class Node
@@ -66,6 +79,7 @@ namespace Spojovy_seznam
                 }
                 return false;
             }
+<<<<<<< Updated upstream
             public int Min()  //slozitost O(n)
             {
                 if (Head == null)
@@ -80,6 +94,8 @@ namespace Spojovy_seznam
                 }
                 return minimum;
             }
+=======
+>>>>>>> Stashed changes
             public string PrintLinkedList()
             {
                 if (Head == null)
@@ -97,6 +113,7 @@ namespace Spojovy_seznam
 
             public void SortLinkedList()
             {
+<<<<<<< Updated upstream
                 if (Head == null)
                     return;
 
@@ -108,6 +125,17 @@ namespace Spojovy_seznam
                     uz = false;
                     praveTed = Head;
                     while (praveTed != null)
+=======
+                
+                if (Head == null)
+                    return;
+                Node praveTed = Head;
+                int promena = 0;
+                while(true)
+                {
+                    bool uz = false;
+                    while (praveTed.Next != null)
+>>>>>>> Stashed changes
                     {
                         if (praveTed.Value > praveTed.Next.Value)
                         {
@@ -115,6 +143,7 @@ namespace Spojovy_seznam
                             praveTed.Value = praveTed.Next.Value;
                             praveTed.Next.Value = promena;
                             uz = true;
+<<<<<<< Updated upstream
                         }
                         praveTed = praveTed.Next;
                     }
@@ -218,6 +247,22 @@ namespace Spojovy_seznam
 
             }
 
+=======
+                            
+                        }
+                        praveTed = praveTed.Next;
+                    }
+                    
+                    if (uz == false)
+                        break;
+                    praveTed = Head;
+                    
+                }
+                      
+
+
+            }
+>>>>>>> Stashed changes
         }
     }
 }
