@@ -13,8 +13,8 @@ namespace BST //binary search tree - binární vyhledávací strom
         static void Main(string[] args)
         {
             Node<string> node1 = new Node<string>(1,"ahoj");
-            Node<string> node2 = new Node<string>(2, "cs");
-            Node<string> node3 = new Node<string>(4, "nazdar");
+            Node<string> node2 = new Node<string>(2, "čau");
+            Node<string> node3 = new Node<string>(5, "nazdar");
 
             node2.Levy = node1;
             node2.Pravy = node3;
@@ -22,12 +22,7 @@ namespace BST //binary search tree - binární vyhledávací strom
             BinarniVyhledavaciStrom<string> strom = new BinarniVyhledavaciStrom<string>();
             strom.Koren = node2;
 
-            strom.Insert(3, "ahojdaa");
-            Console.WriteLine(strom.Find(3));
-            Console.WriteLine(strom.Min(strom.Koren));
-            Console.WriteLine(strom.Show());
-            Console.ReadLine();
-
+            
         }
     }
 
@@ -44,6 +39,8 @@ namespace BST //binary search tree - binární vyhledávací strom
         {
             Key = key;
             Value = value;
+            Levy = null;
+            Pravy = null;
         }
     }
     class BinarniVyhledavaciStrom<T>
@@ -146,36 +143,46 @@ namespace BST //binary search tree - binární vyhledávací strom
 
         public void Delete(int key)
         {
-            
-                
-            void _delete(Node<T> v)
+            Node<T> _min(Node<T> node)
+            {
+                if (node.Levy == null)
+                    return node;
+                else
+                    return _min(node.Levy);
+            }
+
+            Node<T> _delete(Node<T> v, int key2)
             {
                 if (v == null)
-                    return;
-                if (key < v.Key)
-                    _delete(v.Levy);
-                if (key > v.Key)
-                    _delete(v.Pravy);
+                    return null;
+                if (key2 < v.Key)
+                    v.Levy = _delete(v.Levy, key2);
+                else if (key2 > v.Key)
+                    v.Pravy = _delete(v.Pravy, key2);
                 else
                 {
                     if (v.Levy == null && v.Pravy == null)                    
-                        v = null;                    
-                    if (v.Levy == null)
-                        v = v.Pravy;
-                    if (v.Pravy == null)
-                        v = v.Levy; // KROK 7!
-
-
-
-
-
+                        return null;
+                    else if (v.Levy == null)
+                    {
+                        return v.Pravy;
+                    }
+                    else if (v.Pravy == null)
+                    {
+                        return v.Levy;
+                    }
+                    else
+                    {
+                        Node<T> s = _min(v.Pravy);
+                        v.Key = s.Key;
+                        v.Value = s.Value;
+                        v.Pravy = _delete(v.Pravy, s.Key);
+                        
+                    }
                 }
+                return v;
             }
-
-
-
-
-            _delete(Koren);
+            _delete(Koren, key);
 
         }
     }
