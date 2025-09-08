@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace fixtree
 {
@@ -12,7 +13,85 @@ namespace fixtree
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Zadej Postfix");
             string vstup = Console.ReadLine();
+
+            FixTree fixTree = new FixTree();
+            fixTree.ExpressionTree(vstup);
+
+            Console.WriteLine("Prefix:");
+            Console.WriteLine(fixTree.VypisPrefix());
+
+            Console.WriteLine("Infix:");
+            Console.WriteLine(fixTree.VypisInfix());
+
+            Console.WriteLine("Postfix:");
+            Console.WriteLine(fixTree.VypisPostfix());
+
+            Console.WriteLine("Vysledek:");
+            Console.WriteLine(Postfix(vstup));
+            Console.ReadLine();
+        }
+        static float? Postfix(string list1)
+        {
+            string[] list = list1.Split(' ');
+            Stack<float> stack = new Stack<float>();
+            for (int i = 0; i < list.Length; i++)
+            {
+                try
+                {
+                    float operand = float.Parse(list[i], CultureInfo.InvariantCulture);
+                    stack.Push(operand);
+                }
+                catch
+                {
+                    char operato = Convert.ToChar(list[i]);
+                    float a;
+                    float b;
+                    try
+                    {
+                        b = stack.Pop();
+                        a = stack.Pop();
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Nedostatek operandů v zásobníku");
+                        return null;
+                    }
+                    switch (operato)
+                    {
+                        case '+':
+                            stack.Push(a + b);
+                            break;
+                        case '-':
+                            stack.Push(a - b);
+                            break;
+                        case '*':
+                            stack.Push(a * b);
+                            break;
+                        case '/':
+                            if (b == 0)
+                            {
+                                Console.WriteLine("Neděl nulou!");
+                                return null;
+                            }
+                            float cislo = a / b;
+                            stack.Push(cislo);
+                            break;
+                    }
+                }
+
+            }
+            if (stack.Count != 1)
+            {
+                Console.WriteLine("Špatný počet operandů a operátorů");
+                return null;
+            }
+            else
+            {
+
+                return stack.Pop();
+            }
 
         }
     }
@@ -47,7 +126,7 @@ namespace fixtree
     class FixTree
     {
         Node koren { get; set; }
-        void ExpressionTree(string list) 
+        public void ExpressionTree(string list) 
         {
             Stack<Node> stack = new Stack<Node>();
             string[] postfix = list.Split(' ');
@@ -72,23 +151,91 @@ namespace fixtree
             else
                 koren = null;
         }
-        void VypisPrefix()
+        public string VypisPrefix()
         {
             if (koren == null)
-                return;
+                return "Nezakořenils";
             StringBuilder sb = new StringBuilder();
             void _prefix(Node node)
             {
                 if (node.jeCislo == true)           // vloží do stringBuilderu operator nebo operand
-                    sb.Append(node.Operand);
+                    sb.Append(node.Operand + " ");
                 else
-                    sb.Append(node.Operator);
+                {
+                    sb.Append(node.Operator + " ");
+                    
+                }
                 if(node.Levy != null)
                 {
                     _prefix(node.Levy);    //když má levého jde do levého podstromu
                 }
+                if (node.Pravy != null)
+                {
+                    _prefix(node.Pravy);
+                }
             }
+            _prefix(koren);
+            return sb.ToString();
 
         }
+        public string VypisInfix()
+        {
+            if (koren == null)
+                return "Nezakořenils";
+            StringBuilder sb = new StringBuilder();
+            void _infix(Node node)
+            {
+                if (node.jeCislo != true)
+                    sb.Append("(");
+                else
+                {
+                    sb.Append(node.Operand);
+                    
+                }
+                if (node.Levy != null)
+                {
+                    _infix(node.Levy);
+                    sb.Append( " " + node.Operator + " ");
+                }
+                
+                if (node.Pravy != null)
+                {
+                    _infix(node.Pravy);
+                    sb.Append(")");
+                }
+                
+            }
+            _infix(koren);
+            sb.Remove(0,1);
+            sb.Remove(sb.Length-1,1);
+            return sb.ToString();
+        }
+        public string VypisPostfix()
+        {
+            if (koren == null)
+                return "Nezakořenils";
+            StringBuilder sb = new StringBuilder();
+            void _postfix(Node node)
+            {
+                if (node.Levy != null)
+                {
+                    _postfix(node.Levy);
+                }
+                if (node.Pravy != null)
+                {
+                    _postfix(node.Pravy);
+                }
+                if (node.jeCislo == true)           // vloží do stringBuilderu operator nebo operand
+                    sb.Append(node.Operand + " ");
+                else
+                {
+                    sb.Append(node.Operator + " ");
+                }
+            }
+            _postfix(koren);
+            return sb.ToString();
+               
+        }
+
     }
 }
