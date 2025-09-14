@@ -11,6 +11,7 @@ namespace uvodniPrace
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Film prvni = new Film("Forrest Gump", "Robert", "Zemeckis", 1994);
             Film druhy = new Film("Temný rytíř", "Christopher", "Nolan", 2008);
             Film treti = new Film("Jurský park", "Steven", "Spielberg", 1993);
@@ -18,6 +19,51 @@ namespace uvodniPrace
             list.Add(prvni);
             list.Add(druhy);
             list.Add(treti);
+
+            Random random = new Random();
+            for (int i = 0; i < 15; i++)
+            {
+                prvni.pridejHodnoceni(random.Next(6));
+            }
+            for (int i = 0; i < 15; i++)
+            {
+                druhy.pridejHodnoceni(random.Next(6));
+            }
+            for (int i = 0; i < 15; i++)
+            {
+                treti.pridejHodnoceni(random.Next(6));
+            }
+
+            Film filmH = null;
+            Film filmN = null;
+            double minHvezd = 0;
+            int nazev = 0;
+            foreach (Film film in list)
+            {
+                if (film.Hodnoceni > minHvezd)
+                {
+                    minHvezd = film.Hodnoceni;
+                    filmH = film;
+                }
+                if (film.Nazev.Length > nazev)
+                {
+                    nazev = film.Nazev.Length;
+                    filmN = film;
+                }
+            }
+            Console.WriteLine("Film s nejlepším průměrným hodnocením je: " + filmH.Nazev);
+            Console.WriteLine("Film s nejdelším názvem je: " + filmN.Nazev);
+
+            foreach (Film film in list)
+            {
+                if (film.Hodnoceni < 3)
+                    Console.WriteLine(film.Nazev + " je odpad! Má hodnocení jen " + film.Hodnoceni);
+            }
+
+            Console.WriteLine(prvni.vypisFilmu());
+            Console.WriteLine(druhy.vypisFilmu());
+            Console.WriteLine(treti.vypisFilmu());
+            Console.ReadLine();
         }
     }
     class Film
@@ -29,7 +75,7 @@ namespace uvodniPrace
             PrijmeniRezisera = prijmeniRezisera;
             RokVzniku = rokVzniku;
         }
-        string Nazev { get; }
+        public string Nazev { get; }
         string JmenoRezisera { get; }
         string PrijmeniRezisera { get; }
         int RokVzniku { get; }
@@ -58,7 +104,7 @@ namespace uvodniPrace
         }
         public string vypisFilmu()
         {
-            string vysledek = Nazev + " (" + RokVzniku + "; " + PrijmeniRezisera + ", " + JmenoRezisera[0] + "):" + Hodnoceni;
+            string vysledek = Nazev + " (" + RokVzniku + "; " + PrijmeniRezisera + ", " + JmenoRezisera[0] + "):" + Hodnoceni + "⭐";
             return vysledek;
         }
     }
