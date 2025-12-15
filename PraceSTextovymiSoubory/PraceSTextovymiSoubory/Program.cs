@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace PraceSTextovymiSoubory
 {
@@ -177,23 +179,49 @@ namespace PraceSTextovymiSoubory
 
 
 
-            // (10b) 4. Kolik slov má soubor 6.txt?
+            // (10b) 4. Kolik slov má soubor 6.txt?    52s
             // Za slovo teď považujme neprázdnou souvislou posloupnost nebílých znaků oddělené bílými.
             // Tip: Split defaultně odděluje na základě libovolných bílých znaků, ale je tam jeden háček.. jaký?
             // V souboru je vidět 52 slov.
-            
+
+            using (StreamReader sr = new StreamReader(@"vstupni_soubory\6.txt"))
+            {
+                bool Minuly = false;
+                int pocetSlov = 0;
+
+                while (true)
+                {
+                    try
+                    {
+                        string[] radek = sr.ReadLine().Split();
+                        pocetSlov = pocetSlov + radek.Length - 1;
+                    }
+                    catch (Exception)
+                    {
+                        break;
+                    }
+
+                }
+
+                Console.WriteLine(pocetSlov);
+            }
+
 
 
             // (15b) 5. Zapište do souboru 7.txt slovo "řeřicha". Povedlo se? 
             // Vypište obsah souboru do konzole. V čem je u konzole problém a jak ho spravit?
-            // Jaké kódování používá C#? Kolik bytů na znak?
+            // Jaké kódování používá C#? Kolik bytů na znak? UTF-16 - normalni znaky 2 byty, specialni 4 byty
+            
+            File.WriteAllText(@"vstupni_soubory\7.txt", "řeřicha");
+
+
+            Console.WriteLine(File.ReadAllText(@"vstupni_soubory\7.txt"));
 
 
 
             // (25b) 6. Vypište četnosti jednotlivých slov v souboru 8.txt do souboru 9.txt ve formátu slovo:četnost na samostatný řádek.
             // Tentokrát však slova nejprve očištěte od diakritiky a všechna písmena berte jako malá (tak je i ukládejte do slovníku).
             // Tip: Využijte slovník: Dictionary<string, int> slova = new Dictionary<string, int>();
-            
 
 
             // (+15b) Bonus: Vypište četnosti jednotlivých znaků abecedy (malá a velká písmena) v souboru 8.txt do konzole.
