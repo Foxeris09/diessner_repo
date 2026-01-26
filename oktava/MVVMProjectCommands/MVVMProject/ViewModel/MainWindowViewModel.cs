@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MVVMProject.ViewModel
 {
@@ -36,6 +37,20 @@ namespace MVVMProject.ViewModel
             
         }
 
+
+        private string taskName { get; set; }
+        public string TaskName
+        {
+            get => taskName;
+            set
+            {
+                taskName = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
         private Item selectedItem;
 
 
@@ -47,14 +62,19 @@ namespace MVVMProject.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        public string DeadlineText { get; set; }
         private void AddItem()
         {
+            if (DateOnly.TryParse(DeadlineText, out var deadline) == false)
+            {
+                MessageBox.Show("Neplatné datum");
+                return;
+            }
+            ;
             Items.Add(new Item()
             {
-                Name = "ProductX",
-                SerialNumber = "000X",
-                Quantity = 0
+                Name = TaskName,
+                Deadline = deadline 
             });
         }
 
