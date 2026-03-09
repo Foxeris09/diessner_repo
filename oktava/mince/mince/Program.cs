@@ -16,10 +16,17 @@ namespace mince
             int indHodnot = 0;
             int indCesty = 0;
             int soucet = 0;
-
             int suma = Vstup(hodnoty);
+            bool b = false;
+            
             Console.WriteLine();
-            Backtrack(hodnoty, cesta, suma, indHodnot, indCesty, soucet);
+
+            if (suma == 0)
+                Console.WriteLine("Nepoužije se žádná mince.");
+            else
+                Backtrack(hodnoty, cesta, suma, indHodnot, indCesty, soucet, ref b);
+            if (!b && suma != 0)
+                Console.WriteLine("Součtu nejde dosáhnout.");
             Console.ReadLine();
         }
         static int Vstup(List<int>list)
@@ -34,7 +41,7 @@ namespace mince
             return c;
         }
 
-        static void Backtrack(List<int>mince, List<int>reseni, int sum, int indMince, int indReseni, int aktualniSum)
+        static void Backtrack(List<int>mince, List<int>reseni, int sum, int indMince, int indReseni, int aktualniSum, ref bool nejakeReseni)
         {
             for (int i = indMince; i < mince.Count; i++)
             {
@@ -46,12 +53,13 @@ namespace mince
                 {
                     reseni.Add(mince[i]);
                     Vystup(reseni);
+                    nejakeReseni = true;
                     reseni.RemoveAt(reseni.Count - 1);
                     continue;
                 }
                 reseni.Add(mince[i]);
                 aktualniSum += mince[i];
-                Backtrack(mince, reseni, sum, i, indReseni, aktualniSum);
+                Backtrack(mince, reseni, sum, i, indReseni, aktualniSum, ref nejakeReseni);
                 aktualniSum -= mince[i];
                 reseni.RemoveAt(reseni.Count - 1);
             }
